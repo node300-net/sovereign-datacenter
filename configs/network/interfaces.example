@@ -1,0 +1,45 @@
+# /etc/network/interfaces  –  BEISPIEL für einen Cluster-Node (Debian/ifupdown2)
+# ⚠️ PLATZHALTER ersetzen. Interface-Namen mit `ip -br link` ermitteln.
+# Nach Änderung: ifreload -a   (IPMI-Konsole offen halten!)
+
+auto lo
+iface lo inet loopback
+
+# --- Onboard 1GbE #1 → Huawei (Trunk) --------------------------------------
+auto eno1
+iface eno1 inet manual
+#   mtu 1500
+
+auto vmbr0
+iface vmbr0 inet static
+        address 10.10.10.<<NODE>>/24
+        gateway 10.10.10.1
+        bridge-ports eno1
+        bridge-stp off
+        bridge-fd 0
+        bridge-vlan-aware yes
+        bridge-vids 2-4094
+# VLAN 10 (Mgmt) läuft untagged oder als PVID – Switch-Port entsprechend setzen!
+
+# --- Onboard 1GbE #2 → Zyxel (Access VLAN 30, Corosync Ring0) --------------
+auto eno2
+iface eno2 inet static
+        address 10.10.30.<<NODE>>/24
+#       Kein Gateway! Nicht geroutet.
+
+# --- X710 Port 0 – Storage / Migration (VLAN 40) ---------------------------
+# Nur wenn die X710 in DIESEM Node steckt (siehe Reality Check RC-3)
+#auto enp1s0f0
+#iface enp1s0f0 inet static
+#        address 10.10.40.<<NODE>>/24
+#        mtu 9000
+
+# --- X710 Port 1 – Ring zu Nachbar-Node ------------------------------------
+#auto enp1s0f1
+#iface enp1s0f1 inet static
+#        address 10.10.41.<<NODE>>/30
+#        mtu 9000
+
+# --- Optional: VLAN-Subinterfaces falls Bridge nicht vlan-aware ------------
+#auto vmbr0.50
+#iface vmbr0.50 inet manual

@@ -1,0 +1,40 @@
+---
+# Minimaler Hardening-/Baseline-Playbook für Proxmox-Hosts
+# ⚠️ BEISPIEL – vor Produktion --check und Review!
+- name: Sovereign Datacenter – Host-Baseline
+  hosts: pve_cluster
+  become: true
+  gather_facts: true
+  tasks:
+    - name: ZFS ARC-Limit setzen
+      copy:
+        dest: /etc/modprobe.d/zfs.conf
+        content: |
+          options zfs zfs_arc_max={{ zfs_arc_max }}
+        mode: "0644"
+      notify: update initramfs
+
+    - name: Unnötige Dienste absichern – SSH nur Key
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "{{ item.re }}"
+        line: "{{ item.line }}"
+      loop:
+        - { re: '^#?PasswordAuthentication', line: 'PasswordAuthentication no' }
+        - { re: '^#?PermitRootLogin',        line: 'PermitRootLogin prohibit-password' }
+      notify: reload ssh
+
+    - name: Fail2ban installieren (optional)
+      apt:
+        name: fail2ban
+        state: present
+        update_cache: true
+      when: node_role == "sec-core"
+
+  handlers:
+    - name: update initramfs
+      command: update-initramfs -u -k all
+    - name: reload ssh
+      service:
+        name: ssh
+        state: reloaded

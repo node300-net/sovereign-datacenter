@@ -1,0 +1,8 @@
+# /etc/modprobe.d/iommu-unsafe-interrupts.conf   (nur bei Bedarf aktivieren: Dateiendung .disabled entfernen)
+#
+# Intel 5500/5520-Chipsätze (Westmere-Ära) haben bei bestimmten Revisionen ein Erratum; Linux deaktiviert
+# dann Interrupt-Remapping (Meldung in dmesg). Ohne IR verweigert vfio die Zuweisung, ausser:
+#
+# ⚠️ SICHERHEITS-TRADEOFF: Eine bösartige/kompromittierte VM könnte MSI-Interrupts fälschen.
+#    Auf einem Lab-Host mit vertrauenswürdigen Gästen akzeptabel – NICHT für Honeypot-/Malware-VMs!
+options vfio_iommu_type1 allow_unsafe_interrupts=1

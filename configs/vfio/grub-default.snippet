@@ -1,0 +1,10 @@
+# /etc/default/grub  (Auszug) – für Nodes, die mit GRUB booten (Legacy-BIOS → typisch für Westmere)
+# Danach:  update-grub   (bzw. proxmox-boot-tool refresh, falls ZFS-root via proxmox-boot-tool)
+#
+# intel_iommu=on : aktiviert VT-d (bei neueren PVE-Kerneln ≥ 6.8 bereits Default – schadet nicht)
+# iommu=pt       : Passthrough-Mode für Host-Geräte (weniger Overhead für Nicht-VFIO-Geräte)
+GRUB_CMDLINE_LINUX_DEFAULT="quiet intel_iommu=on iommu=pt"
+
+# Bei systemd-boot (UEFI + ZFS-root) stattdessen /etc/kernel/cmdline bearbeiten:
+#   root=ZFS=rpool/ROOT/pve-1 boot=zfs quiet intel_iommu=on iommu=pt
+#   → proxmox-boot-tool refresh

@@ -1,0 +1,40 @@
+# OS / Editor
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/
+*.code-workspace
+
+# Secrets & lokale Overrides
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+.env
+.env.*
+*.tfvars
+!*.tfvars.example
+secrets/
+credentials/
+
+# Terraform / OpenTofu
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/crash.log
+**/override.tf
+
+# Ansible
+*.retry
+.vault_pass
+
+# Build / Archive (zip liegt ausserhalb des Repos)
+*.zip
+*.tar.gz
+
+# Logs & Temp
+*.log
+tmp/
+.cache/

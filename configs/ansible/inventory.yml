@@ -1,0 +1,26 @@
+# Ansible Inventory – BEISPIEL
+# ansible-playbook -i inventory.yml site.yml --check
+all:
+  children:
+    pve_cluster:
+      hosts:
+        pve-n0-seccore:
+          ansible_host: 10.10.10.10
+          node_role: sec-core
+          zfs_arc_max: 4294967296
+        pve-n1-defense:
+          ansible_host: 10.10.10.11
+          node_role: defense
+          zfs_arc_max: 6442450944
+        pve-n2-analytics:
+          ansible_host: 10.10.10.12
+          node_role: analytics
+          zfs_arc_max: 8589934592
+        pve-n3-monitor:
+          ansible_host: 10.10.10.13
+          node_role: monitor
+          zfs_arc_max: 6442450944
+      vars:
+        ansible_user: root
+        # ansible_ssh_private_key_file: ~/.ssh/<<KEY>>
+        ansible_python_interpreter: /usr/bin/python3

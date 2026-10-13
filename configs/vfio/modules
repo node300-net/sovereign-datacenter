@@ -1,0 +1,5 @@
+# /etc/modules  (Ergänzung)
+# Ab Kernel 6.2 ist vfio_virqfd in vfio integriert und wird nicht mehr separat benötigt.
+vfio
+vfio_iommu_type1
+vfio_pci

@@ -1,0 +1,4 @@
+proxmox_endpoint     = "https://10.10.10.10:8006/"
+proxmox_tls_insecure = true
+ssh_public_key       = "ssh-ed25519 AAAA... <<dein-key>>"
+# proxmox_api_token  → NICHT hier! export TF_VAR_proxmox_api_token='user@pam!iac=...'

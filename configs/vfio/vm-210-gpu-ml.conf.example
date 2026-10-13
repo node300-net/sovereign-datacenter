@@ -1,0 +1,27 @@
+# /etc/pve/qemu-server/210.conf  –  BEISPIEL: ML-VM auf NODE 2 mit RTX 3070 Ti
+# ⚠️ PLATZHALTER: PCI-Adresse (lspci), Storage-Namen, MAC, VLAN-Tags anpassen.
+agent: 1
+bios: ovmf
+boot: order=scsi0
+cores: 10
+sockets: 1
+cpu: host
+# Pinning auf einen Socket (logische CPUs aus `lscpu -e` – NICHT raten!)
+affinity: <<HOST_CPUS_SOCKET1_e.g._6-11,18-23>>
+numa: 1
+numa0: cpus=0-9,hostnodes=1,memory=65536,policy=bind
+hugepages: 2
+memory: 65536
+balloon: 0
+efidisk0: local-zfs:vm-210-disk-0,efitype=4m,pre-enrolled-keys=0,size=1M
+machine: q35
+name: ml-anomaly-01
+net0: virtio=<<MAC>>,bridge=vmbr0,tag=80,firewall=1
+ostype: l26
+scsi0: local-zfs:vm-210-disk-1,discard=on,iothread=1,size=256G
+scsihw: virtio-scsi-single
+# Ganze GPU inkl. Audio-Funktion (ohne ".0" werden alle Funktionen durchgereicht)
+hostpci0: <<0000:03:00>>,pcie=1
+# Für NIC-Passthrough einer X710-VF (SR-IOV) z. B.:
+# hostpci1: <<0000:05:02.0>>,pcie=1
+vga: std
